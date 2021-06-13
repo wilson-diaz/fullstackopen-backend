@@ -51,6 +51,17 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 app.post('/api/persons', (request, response) => {
+  // validation
+  if (!request.body.name || !request.body.number){
+    return response.status(400).json({
+      error: 'name or number missing'
+    })
+  } else if (persons.find(p => p.name === request.body.name)) {
+    return response.status(400).json({
+      error: 'name must be unique'
+    })
+  }
+
   const newPerson = {
     name: request.body.name,
     number: request.body.number,
@@ -58,7 +69,7 @@ app.post('/api/persons', (request, response) => {
   }
   persons = persons.concat(newPerson)
   console.log(persons)
-  
+
   response.json(newPerson)
 })
 
