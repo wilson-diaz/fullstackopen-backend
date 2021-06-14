@@ -21,7 +21,7 @@ app.get('/info', (request, response) => {
   response.send(`Phonebook has info for ${persons.length} people.<br/>${new Date()}`)
 })
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (request, response, next) => {
   Person.find({}).then(result => {
     response.json(result)
   }).catch(error => next(error))
@@ -33,13 +33,13 @@ app.get('/api/persons/:id', (request, response, next) => {
   }).catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id).then(result => {
     response.status(204).end()
   }).catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   // validation
   if (!request.body.name || !request.body.number) {
     return response.status(400).json({
@@ -59,6 +59,18 @@ app.post('/api/persons', (request, response) => {
   newPerson.save().then(result => {
     response.json(result)
   }).catch(error => next(error))
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const updatedPerson = {
+    number: request.body.number
+  }
+
+  Person.findByIdAndUpdate(request.params.id, updatedPerson, {new:true})
+    .then(result => {
+      response.json(result)
+    })
+    .catch(error => next(error))
 })
 
 // handle requests to unknown endpoints
