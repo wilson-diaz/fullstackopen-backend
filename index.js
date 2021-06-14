@@ -42,17 +42,6 @@ app.delete('/api/persons/:id', (request, response, next) => {
 })
 
 app.post('/api/persons', (request, response, next) => {
-  // validation
-  if (!request.body.name || !request.body.number) {
-    return response.status(400).json({
-      error: 'name or number missing'
-    })
-  } /*else if (persons.find(p => p.name === request.body.name)) {
-    return response.status(400).json({
-      error: 'name must be unique'
-    })
-  }*/
-
   const newPerson = new Person({
     name: request.body.name,
     number: request.body.number
@@ -87,6 +76,8 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({error: 'malformatted id'})
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).send({error: error.message})
   }
 
   next(error)
