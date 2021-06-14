@@ -1,3 +1,4 @@
+/* eslint-disable no-process-exit */
 const mongoose = require('mongoose')
 
 if (process.argv.length < 3) {
@@ -20,7 +21,7 @@ const personSchema = new mongoose.Schema({
   number: String
 })
 
-const Person = mongoose.model("Person", personSchema)
+const Person = mongoose.model('Person', personSchema)
 
 if (process.argv.length === 3) {
   // print all entries

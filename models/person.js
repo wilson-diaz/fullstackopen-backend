@@ -8,7 +8,7 @@ mongoose.connect(url, {
   useUnifiedTopology: true,
   useFindAndModify: false,
   useCreateIndex: true
-}).then(result => {
+}).then(() => {
   console.log('connected to MongoDB')
 }).catch(error => {
   console.log('error connecting to MongoDB:', error.message)
@@ -26,7 +26,7 @@ const personSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: function(v) {
-        return v.replace(/[^0-9]/g, "").length >= 8
+        return v.replace(/[^0-9]/g, '').length >= 8
       },
       message: props => `${props.value} is invalid. Phone number must have at least 8 digits.`
     }
@@ -43,4 +43,4 @@ personSchema.set('toJSON', {
   }
 })
 
-module.exports = mongoose.model("Person", personSchema)
+module.exports = mongoose.model('Person', personSchema)
