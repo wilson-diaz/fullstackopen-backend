@@ -17,8 +17,10 @@ morgan.token('postBody', (request) => {
 })
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :postBody'))
 
-app.get('/info', (request, response) => {
-  response.send(`Phonebook has info for ${persons.length} people.<br/>${new Date()}`)
+app.get('/info', (request, response, next) => {
+  Person.find({}).then(result => {
+    response.send(`Phonebook has info for ${result.length} people.<br/>${new Date()}`)
+  }).catch(error => next(error))
 })
 
 app.get('/api/persons', (request, response, next) => {
